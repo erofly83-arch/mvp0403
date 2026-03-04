@@ -17,6 +17,8 @@
 /* ═══════════════════════════════════════════════════════════
    ПРАЙС-МЕНЕДЖЕР — CALM PRODUCTIVITY REDESIGN
    ═══════════════════════════════════════════════════════════ */
+
+/* ── DESIGN TOKENS ── */
 :root {
   /* Palette */
   --bg:           #F4F5F7;
@@ -68,7 +70,11 @@
   --shadow-md:     0 2px 8px rgba(0,0,0,0.10);
   --shadow-modal:  0 8px 32px rgba(0,0,0,0.18);
 }
+
+/* ── RESET ── */
 *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+/* ── BASE ── */
 html { height: 100%; }
 body {
   font-family: 'Inter', sans-serif;
@@ -89,6 +95,8 @@ body {
   min-height: 100vh;
   align-items: flex-start;
 }
+
+/* ── SIDEBAR ── */
 .app-sidebar {
   width: var(--sidebar-w);
   min-width: var(--sidebar-w);
@@ -152,6 +160,8 @@ body {
   color: var(--text-secondary);
   padding: 10px 16px 4px;
 }
+
+/* ── Nav items (replaces nav-tab) ── */
 .nav-tab {
   display: flex;
   align-items: center;
@@ -212,6 +222,8 @@ body {
   width: 100%;
   transition: opacity 150ms ease;
 }
+
+/* ── MAIN CONTENT ── */
 .app-main {
   flex: 1;
   min-width: 0;
@@ -225,6 +237,8 @@ body {
    ══════════════════════════════════════════ */
 .main-pane { display: none; flex: 1; }
 .main-pane.active { display: block; min-height: calc(100vh - 20px); }
+
+/* ── CONTAINER ── */
 .container {
   margin: 16px;
   background: var(--surface);
@@ -489,6 +503,7 @@ h1 {
   color: var(--text-primary);
   transition: border-color 150ms, box-shadow 150ms;
 }
+/* ── Unified focus ring ── */
 .search-input:focus,
 .je-inp:focus,
 .je-inp-cell:focus,
@@ -503,6 +518,8 @@ select:focus {
   box-shadow: 0 0 0 2px rgba(59,111,212,.12);
 }
 .search-input::placeholder { color: var(--text-muted); }
+
+/* ── Brand table (replaces card layout) ── */
 #brandTableWrap { overflow-x: auto; border: 1px solid var(--border); border-radius: var(--radius-md); background: var(--surface); max-height: 62vh; overflow-y: auto; padding-bottom: 0; }
 #brandDataTable { border-collapse: collapse; width: 100%; font-size: var(--fz-md); table-layout: auto; }
 #brandDataTable col.col-num    { width: 36px; }
@@ -538,6 +555,8 @@ select:focus {
 .brand-actions-cell   { display: flex; gap: 4px; align-items: center; justify-content: center; }
 .brand-subtab-toolbar { display: flex; gap: 6px; align-items: center; flex-wrap: wrap; padding: 8px 0 10px; border-bottom: 1px solid var(--border); margin-bottom: 8px; }
 .brand-search-row { display: flex; gap: 6px; align-items: center; margin-bottom: 8px; }
+
+/* ── Brand field word-suggestion pills ── */
 .brand-word-pills {
   display: flex;
   flex-wrap: wrap;
@@ -823,9 +842,12 @@ table.data-table tbody td:last-child { border-right: none; }
 .column-header-title { display: flex; align-items: flex-start; gap: 3px; }
 .column-name-text { overflow: hidden; text-overflow: ellipsis; white-space: normal; word-break: break-word; font-size: 11px; font-weight: 600; line-height: 1.3; color: #1A1D23; flex: 1; }
 .column-file-name { font-size: 9px; color: var(--text-secondary); font-weight: 500; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; padding: 0; margin-bottom: 2px; display: block; max-width: 100%; }
+.column-file-name--my-price { color: #3B6FD4; }
 /* Hide edit/delete buttons completely */
 .col-header-actions { display: none; }
 .col-header-btn { display: none; }
+
+/* ── Cell components ── */
 .custom-cell {
   display: flex;
   align-items: center;
@@ -1348,8 +1370,10 @@ table.data-table tbody td:last-child { border-right: none; }
   color: var(--accent);
 }
 
+
 /* Load more */
 #pane-prepare .xl-load-more { padding: 10px 14px; text-align: center; border-top: 1px solid var(--border); }
+
 
 /* Obr modals */
 /* obr-modal-box width set above; note-styles below */
@@ -1384,6 +1408,9 @@ table.data-table tbody td:last-child { border-right: none; }
 }
 .col-settings-source-badge--demo {
   background: #FEF3C7; color: #92400E; border: 1px solid #FDE68A;
+}
+.col-settings-source-badge--file {
+  background: var(--green-bg); color: var(--green-dark); border: 1px solid #A7F3D0;
 }
 
 /* Column detection manual */
@@ -1436,6 +1463,7 @@ table.data-table tbody td:last-child { border-right: none; }
 .obr-nextstep-btn.btn-json:hover     { background: var(--amber-bg); border-color: var(--amber); }
 .obr-nextstep-btn.btn-monitor  { border-color: var(--border-strong); color: var(--text-secondary); }
 .obr-nextstep-btn.btn-monitor:hover  { background: var(--surface-alt); border-color: var(--text-secondary); }
+
 
 /* ══════════════════════════════════════════
    TOAST NOTIFICATIONS
@@ -1510,6 +1538,8 @@ select {
 select:focus { /* focus ring in unified block above */ }
 
 details summary { cursor: pointer; user-select: none; }
+
+/* ══ UNIVERSAL CURSOR POINTER ══ */
 button:not(:disabled),
 [onclick],
 .nav-tab,
@@ -1533,12 +1563,69 @@ a { cursor: pointer; }
 /* ══════════════════════════════════════════
    WELCOME PANEL (prepare pane, collapsible)
    ══════════════════════════════════════════ */
+.welcome-panel {
+  background: linear-gradient(135deg, #EEF4FF 0%, #F8FAFF 100%);
+  border: 1px solid #C7D7F5;
+  border-left: 4px solid var(--accent);
+  border-radius: var(--radius-md);
+  margin: 10px 0 10px;
+  overflow: hidden;
+}
+.welcome-toggle {
+  display: flex; align-items: center; gap: 10px;
+  padding: 12px 16px; cursor: pointer; user-select: none;
+  background: none; border: none; width: 100%; text-align: left;
+  font-family: 'Inter', sans-serif;
+}
+.welcome-toggle:hover { background: rgba(59,111,212,.04); }
+.welcome-logo { font-size: 22px; flex-shrink: 0; }
+.welcome-headline { flex: 1; display: flex; flex-direction: column; gap: 1px; min-width: 0; }
+.welcome-title { font-size: var(--fz-lg); font-weight: 700; color: var(--text-primary); line-height: 1.2; }
+.welcome-slogan { font-size: var(--fz-sm); color: #4B6DB0; font-weight: 500; font-style: italic; }
+.welcome-chevron { font-size: 11px; color: var(--text-muted); transition: transform 200ms; flex-shrink: 0; }
+.welcome-panel.open .welcome-chevron { transform: rotate(180deg); }
+.welcome-body { display: none; padding: 0 16px 16px; border-top: 1px solid #DDEAFF; }
+.welcome-panel.open .welcome-body { display: block; }
+.welcome-section-title {
+  font-size: var(--fz-xs); font-weight: 700; text-transform: uppercase;
+  letter-spacing: 0.5px; color: var(--text-secondary); margin: 14px 0 8px;
+}
+.welcome-cards { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 4px; }
+.welcome-card {
+  flex: 1; min-width: 200px; background: var(--surface);
+  border: 1px solid var(--border); border-radius: var(--radius-md); padding: 10px 12px;
+}
+.welcome-card-title { font-size: var(--fz-md); font-weight: 700; color: var(--text-primary); margin-bottom: 4px; }
+.welcome-card-text { font-size: var(--fz-xs); color: var(--text-secondary); line-height: 1.5; }
+.welcome-steps { display: flex; flex-direction: column; gap: 6px; }
+.welcome-step { display: flex; align-items: flex-start; gap: 10px; background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-md); padding: 8px 12px; }
+.welcome-step-num { width: 20px; height: 20px; background: var(--accent); color: #fff; border-radius: 50%; font-size: 10px; font-weight: 700; display: flex; align-items: center; justify-content: center; flex-shrink: 0; margin-top: 1px; }
+.welcome-step-text { font-size: var(--fz-sm); color: var(--text-primary); line-height: 1.5; flex: 1; }
+.welcome-step-text b { color: #3059A8; }
+.welcome-note { margin-top: 10px; background: #FFFBEB; border: 1px solid #FDE68A; border-radius: var(--radius-md); padding: 8px 12px; font-size: var(--fz-sm); color: #92400E; line-height: 1.5; }
 
 /* ══════════════════════════════════════════
    DASHBOARD INSTRUCTION (monitor / matcher empty state)
    ══════════════════════════════════════════ */
 .dash-instr { padding: 0 0 12px; }
+.dash-instr-hero { padding: 0 0 14px; border-bottom: 1px solid var(--border); margin-bottom: 14px; }
+.dash-instr-hero-icon { font-size: 38px; margin-bottom: 10px; }
+.dash-instr-hero-title { font-size: var(--fz-xl); font-weight: 700; color: var(--text-primary); margin-bottom: 8px; }
+.dash-instr-hero-sub { font-size: var(--fz-base); color: var(--text-secondary); line-height: 1.65; }
+.dash-instr-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(210px, 1fr)); gap: 10px; margin-bottom: 20px; }
+.dash-instr-card { background: var(--surface-alt); border: 1px solid var(--border); border-radius: var(--radius-md); padding: 12px 14px; }
+.dash-instr-card-header { display: flex; align-items: center; gap: 8px; margin-bottom: 6px; }
+.dash-instr-card-icon { font-size: 18px; }
+.dash-instr-card-title { font-size: var(--fz-md); font-weight: 700; color: var(--text-primary); }
+.dash-instr-card-body { font-size: var(--fz-sm); color: var(--text-secondary); line-height: 1.55; }
+.dash-instr-how { background: #EEF4FF; border: 1px solid #C7D7F5; border-radius: var(--radius-md); padding: 14px 16px; margin-bottom: 14px; }
+.dash-instr-how-title { font-size: var(--fz-xs); font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; color: #3059A8; margin-bottom: 10px; }
+.dash-instr-steps { display: flex; flex-direction: column; gap: 7px; }
+.dash-instr-step { display: flex; align-items: flex-start; gap: 10px; }
+.dash-instr-step-num { width: 20px; height: 20px; background: var(--accent); color: #fff; border-radius: 50%; font-size: 10px; font-weight: 700; display: flex; align-items: center; justify-content: center; flex-shrink: 0; margin-top: 2px; }
+.dash-instr-step-text { font-size: var(--fz-sm); color: var(--text-primary); line-height: 1.5; flex: 1; }
 .dash-instr-step-text b { color: #3059A8; }
+.dash-instr-tip { background: #FFFBEB; border: 1px solid #FDE68A; border-left: 3px solid #F59E0B; border-radius: var(--radius-md); padding: 8px 12px; font-size: var(--fz-sm); color: #92400E; line-height: 1.5; }
 
 /* ══════════════════════════════════════════
    COLLAPSIBLE SIDEBAR
@@ -1708,6 +1795,7 @@ a { cursor: pointer; }
 
 /* Collapse: sidebar files section hidden via .collapsed .sidebar-files-section rule above */
 
+
 /* File chip shown in JSON/MyPrice slots when loaded */
 /* Unified file row: used in JSON, MyPrice, and Supplier slots */
 .slot-file-row-count {
@@ -1840,6 +1928,8 @@ a { cursor: pointer; }
   border-color: var(--amber);
   color: #92400E;
 }
+
+/* ── Prepare pane title (inside obr-container, not .container) ── */
 .obr-pane-title {
   display: flex;
   align-items: center;
@@ -1850,6 +1940,7 @@ a { cursor: pointer; }
 }
 
 /* Memory-cleared banner */
+/* ── Upload header bar (prepare pane) — styled like controls toolbar ── */
 .obr-upload-header {
   display: flex;
   align-items: center;
@@ -1949,6 +2040,8 @@ a { cursor: pointer; }
   margin: 0 2px;
   flex-shrink: 0;
 }
+
+
 
 /* ══════════════════════════════════════════
    SUPPLIER FILE LIST (monitor slot + sidebar)
@@ -2057,6 +2150,8 @@ a { cursor: pointer; }
   line-height: 1.3;
 }
 .pane-title-extra { display: flex; align-items: center; gap: 6px; }
+
+/* ── Prepare pane: advantages grid ── */
 .prepare-adv-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
@@ -2098,6 +2193,8 @@ a { cursor: pointer; }
   color: var(--text-secondary);
   line-height: 1.5;
 }
+
+/* ── Monitor info panel (below title, shown only when data loaded) ── */
 .monitor-info-panel {
   margin: 0 0 14px 0;
   background: var(--surface);
@@ -2157,6 +2254,36 @@ a { cursor: pointer; }
 }
 
 /* Compact stat chips for monitor pane title */
+.monitor-stat-chip {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  padding: 3px 10px;
+  min-width: 52px;
+  gap: 1px;
+}
+.monitor-stat-chip-val {
+  font-family: 'Inter', sans-serif;
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--accent);
+  line-height: 1.1;
+}
+.monitor-stat-chip-lbl {
+  font-size: 9px;
+  font-weight: 600;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
+  white-space: nowrap;
+}
+.monitor-stat-chip:nth-child(1) .monitor-stat-chip-val { color: var(--accent); }
+.monitor-stat-chip:nth-child(2) .monitor-stat-chip-val { color: #2563EB; }
+.monitor-stat-chip:nth-child(3) .monitor-stat-chip-val { color: var(--green); }
+.monitor-stat-chip:nth-child(4) .monitor-stat-chip-val { color: var(--amber); }
 
 /* ══════════════════════════════════════════
    DISABLED BUTTONS OVERRIDE
@@ -2520,8 +2647,8 @@ a { cursor: pointer; }
       <p>Сравнение цен с поставщиками по штрихкодам</p>
     </div>
     <div class="pane-title-extra">
-      <button class="btn btn-success" id="monitorDownloadArchiveBtn" disabled title="Скачать Excel с подсветкой минимальных цен одним архивом">
-        <span class="xl-icon">📦</span> Скачать архивом
+      <button class="btn btn-success" id="monitorDownloadArchiveBtn" disabled title="Скачать все CSV, Excel и JSON одним архивом">
+        <span class="xl-icon">📦</span> Скачать все архивом
       </button>
     </div>
   </div>
@@ -3233,6 +3360,8 @@ const BRAND_CONFIG_SAVED = {};
         return { canonical: b, wasSynonym: false };
     }
 
+    // ======== ОСНОВНОЙ КОД ПРИЛОЖЕНИЯ ========
+
     let myPriceData = null;
     let competitorFilesData = [];
     let allFilesData = [];
@@ -3312,61 +3441,12 @@ exportMyPriceBtn.addEventListener('click', async () => await generateExcel('mypr
 exportAllBtn.addEventListener('click', async () => await generateExcel('all'));
     exportCurrentBtn.addEventListener('click', async () => await generateExcel('current'));
 
-    // Monitor archive button — generates Excel with min-price highlighting forced, then zips
+    // Monitor archive button — delegates to obrHeaderArchiveBtn (same CSV+Excel+JSON zip)
     const _monArchBtn = document.getElementById('monitorDownloadArchiveBtn');
     if (_monArchBtn) {
-      _monArchBtn.addEventListener('click', async function() {
-        if (groupedData.length === 0) { showToast('Нет данных для экспорта', 'warn'); return; }
-        try {
-          _monArchBtn.disabled = true;
-          _monArchBtn.textContent = '⏳ Генерация...';
-          // Force min price mode ON for this export
-          const _prevMode = showMinPriceMode;
-          showMinPriceMode = true;
-          // Intercept saveBlobWithDialogOrDownload to capture the Excel blob instead of downloading directly
-          const _origSave = window.saveBlobWithDialogOrDownload;
-          const _captured = [];
-          window.saveBlobWithDialogOrDownload = async function(blob, name) { _captured.push({ blob, name }); };
-          try {
-            await generateExcel('all');
-          } finally {
-            window.saveBlobWithDialogOrDownload = _origSave;
-            showMinPriceMode = _prevMode;
-          }
-          if (!_captured.length) throw new Error('Excel не был сгенерирован');
-          // Build ZIP: Excel + JSON settings
-          const zip = new JSZip();
-          for (const xf of _captured) {
-            const ab = await xf.blob.arrayBuffer();
-            zip.file(xf.name, ab);
-          }
-          // Add JSON settings if available
-          try {
-            if ((typeof jeDB !== 'undefined' && Object.keys(jeDB).length > 0) ||
-                (typeof _brandDB !== 'undefined' && Object.keys(_brandDB).length > 0)) {
-              const _combined = {
-                barcodes: (typeof jeDB !== 'undefined') ? jeDB : {},
-                brands: (typeof _brandDB !== 'undefined') ? _brandDB : {},
-                columnSettings: (typeof columnTemplates !== 'undefined' && typeof columnSynonyms !== 'undefined')
-                  ? { templates: columnTemplates, synonyms: columnSynonyms } : undefined
-              };
-              const _nd = new Date();
-              const _s = _nd.getFullYear() + '_' + String(_nd.getMonth()+1).padStart(2,'0') + '_' + String(_nd.getDate()).padStart(2,'0');
-              zip.file('settings_' + _s + '.json', JSON.stringify(_combined, null, 2));
-            }
-          } catch(je) {}
-          const zipBlob = await zip.generateAsync({ type: 'blob', compression: 'DEFLATE', compressionOptions: { level: 6 } });
-          const _nd2 = new Date();
-          const _stamp = _nd2.getFullYear() + '_' + String(_nd2.getMonth()+1).padStart(2,'0') + '_' + String(_nd2.getDate()).padStart(2,'0');
-          saveAs(zipBlob, 'monitoring_' + _stamp + '.zip');
-          _monArchBtn.disabled = false;
-          _monArchBtn.innerHTML = '<span class="xl-icon">📦</span> Скачать архивом';
-          showToast('✅ Архив скачан: Excel с подсветкой минимальных цен', 'ok');
-        } catch(err) {
-          _monArchBtn.disabled = false;
-          _monArchBtn.innerHTML = '<span class="xl-icon">📦</span> Скачать архивом';
-          showToast('Ошибка: ' + (err.message||String(err)), 'err');
-        }
+      _monArchBtn.addEventListener('click', function() {
+        const _hdrBtn = document.getElementById('obrHeaderArchiveBtn');
+        if (_hdrBtn) _hdrBtn.click();
       });
     }
 
@@ -3386,12 +3466,14 @@ const META_TRANSIT_KEY = '__meta_transit';
 const STOCK_COL_SYNONYMS = ['остаток', 'остатки', 'наличие', 'склад'];
 const TRANSIT_COL_SYNONYMS = ['в пути', 'впути', 'транзит', 'transit', 'in transit'];
 
+
 const PRICE_DECIMALS = 1;
 
 function roundPrice(n) {
   const m = 10 ** PRICE_DECIMALS;
   return Math.round(n * m) / m;
 }
+
 
 function isPriceLikeColumn(colName) {
   const s = String(colName || '').toLowerCase();
@@ -3400,6 +3482,7 @@ function isPriceLikeColumn(colName) {
   if (isStock) return false;
   return PRICE_COL_SYNONYMS.some(k => s.includes(k));
 }
+
 
 function parsePriceNumber(val) {
   const s = String(val ?? '').trim();
@@ -3418,6 +3501,7 @@ function extractPackQtyFromName(name) {
   if (!Number.isFinite(q) || q <= 1) return null;
   return q;
 }
+
 
 function samePrice(a, b) {
   const na = parsePriceNumber(a);
@@ -3813,6 +3897,8 @@ function samePrice(a, b) {
                     });
                 }
             });
+
+
 
             // Авто-деление: если загружен "Мой прайс" и в названии найдено количество (например 30шт/24бл),
             // то делим все цены в строке, которые выше минимальной в 3 раза, на это количество.
@@ -4674,6 +4760,7 @@ return { barcode: item.barcode, packQty, autoDivFactor,
     }
 }
 
+
     function updateUI() {
         const hasData = groupedData.length > 0;
         const hasMyPrice = myPriceData !== null;
@@ -4688,7 +4775,7 @@ return { barcode: item.barcode, packQty, autoDivFactor,
         if (minPriceBtn) minPriceBtn.disabled = !hasData;
         searchInput.disabled = !hasData;
         const _monArchBtn = document.getElementById('monitorDownloadArchiveBtn');
-        if (_monArchBtn) _monArchBtn.disabled = !hasData;
+        if (_monArchBtn) _monArchBtn.disabled = !(window._obrArchiveFiles && window._obrArchiveFiles.length > 0);
 
         // Show/hide search box and monitor empty state
         const _msBox = document.getElementById('monitorSearchBox');
@@ -4906,7 +4993,10 @@ return { barcode: item.barcode, packQty, autoDivFactor,
       }
     };
 
+    // ════════════════════════════════════════════════════════════════════════
     // РЕЖИМ ОБУЧЕНИЯ
+    // ════════════════════════════════════════════════════════════════════════
+
 
     // ── Тост об успешном завершении мониторинга ───────────────────────────────
     function showCompletionToast() {
@@ -4957,6 +5047,7 @@ return { barcode: item.barcode, packQty, autoDivFactor,
             toast.style.transform = 'translateY(20px)';
         }, 12000);
     }
+
 </script>
 
 <!-- ═══ NEXT-STEP MODAL (after OBR save) ═══ -->
@@ -4975,7 +5066,9 @@ return { barcode: item.barcode, packQty, autoDivFactor,
 
 <!-- ═══ COMBINED NAV + APPBRIDGE + OBR ═══ -->
 <script>
+// ════════════════════════════════════════════════════════════════════════════
 // COMBINED TAB NAVIGATION
+// ════════════════════════════════════════════════════════════════════════════
 function switchMainPane(name) {
   const prev = document.querySelector('.main-pane.active');
   const prevId = prev ? prev.id : '';
@@ -5022,14 +5115,18 @@ document.querySelectorAll('.nav-tab[data-pane]').forEach(t =>
     switchMainPane(t.dataset.pane);
   }));
 
+// ════════════════════════════════════════════════════════════════════════════
 // APP BRIDGE — event bus between OBR and PriceMatcher
+// ════════════════════════════════════════════════════════════════════════════
 const AppBridge = {
   _handlers: {},
   on(event, fn) { (this._handlers[event] = this._handlers[event] || []).push(fn); },
   emit(event, data) { (this._handlers[event] || []).forEach(fn => fn(data)); }
 };
 
+// ════════════════════════════════════════════════════════════════════════════
 // OBR TYPE MANAGEMENT
+// ════════════════════════════════════════════════════════════════════════════
 let obrCurrentType = 'supplier';
 function obrSetType(type) {
   obrCurrentType = type;
@@ -5049,6 +5146,7 @@ function obrSetType(type) {
   document.head.appendChild(configEl);
 })();
 
+// ===== CONFIG =====
 function getUserConfig() {
   const el = document.getElementById("obrUserConfig");
   if (!el) return {};
@@ -5121,6 +5219,7 @@ let _columnSettingsFromFile = (() => {
 })();
 persistAll(false); // инициализация — не ставим «несохранено»
 
+// ===== STATE =====
 let tableData = null;
 let selectedColumns = new Map();
 let startRowIndex = 0;
@@ -5136,7 +5235,9 @@ let pendingCsvFileName = null;
 let pendingSkippedRows = [];
 // Archive: track all CSVs processed in this session for zip download
 let _obrArchiveFiles = []; // [{fileName, csvText}]
+window._obrArchiveFiles = _obrArchiveFiles; // expose for cross-script access (session save/restore)
 
+// ===== DOM =====
 const fileInput      = document.getElementById("obrFileInput");
 const fileInputMyPrice = document.getElementById("obrFileInputMyPrice");
 const obrTableContainer = document.getElementById("obrTableContainer");
@@ -5161,6 +5262,7 @@ const skippedSummary = document.getElementById("obrSkippedSummary");
 const skippedTable   = document.getElementById("obrSkippedTable");
 const confirmDownloadCsvBtn = document.getElementById("obrConfirmDownloadCsvBtn");
 const downloadSkippedBtn = document.getElementById("obrDownloadSkippedBtn");
+// ===== CLOSE DROPDOWN =====
 document.addEventListener("click", function(e) {
   if (!e.target.closest("#pane-prepare .rename-wrapper") && !e.target.closest(".modal-box") && activeDropdown) {
     activeDropdown.classList.remove("show");
@@ -5168,6 +5270,7 @@ document.addEventListener("click", function(e) {
   }
 });
 
+// ===== QUEUE =====
 function renderQueuePanel() {
   const panel       = document.getElementById("obrQueuePanel");
   const queueList   = document.getElementById("obrQueueList");
@@ -5270,6 +5373,7 @@ function loadNextFromQueue() {
 
 // JSON upload card is always visible — no-op: JSON card always shown
 
+// ===== MEMORY CLEAR (when navigating away from prepare pane) =====
 function obrClearTable() {
   // Drop all large data refs
   tableData        = null;
@@ -5300,6 +5404,7 @@ function obrClearTable() {
   if (fileNameEl) fileNameEl.textContent = "";
   if (fileInput)       fileInput.value       = "";
   if (fileInputMyPrice) fileInputMyPrice.value = "";
+
 
   if (typeof updateStats === 'function') updateStats();
 }
@@ -5340,6 +5445,7 @@ if (obrJsonUploadInput) obrJsonUploadInput.addEventListener("change", function(e
   _handleJsonFileUpload(file, function(){ setTimeout(function(){if(typeof obrShowNextStep==='function')obrShowNextStep('json');},400); });
   e.target.value = "";
 });
+
 
 // Cleared-hint file inputs
 const obrClearedFileInput = document.getElementById("obrClearedFileInput");
@@ -5392,6 +5498,7 @@ if (obrQueueSkipBtn) {
   });
 }
 
+// ===== DOWNLOAD ARCHIVE =====
 if (downloadArchiveBtn) {
   downloadArchiveBtn.addEventListener("click", async function() {
     if (!_obrArchiveFiles.length) { showToast('Нет обработанных файлов для архива', 'warn'); return; }
@@ -5452,6 +5559,7 @@ sheetSelect.addEventListener("change", function() {
   loadSheet(parseInt(sheetSelect.value, 10) || 0);
 });
 
+// ===== AUTO-DETECT =====
 function obrAutoDetectColumns() {
   if (!tableData || !tableData.length) return;
   const SCAN = 15;
@@ -5488,6 +5596,7 @@ function loadSheet(idx) {
 
 }
 
+// ===== RENDER =====
 function obrEsc(t) {
   return String(t).replaceAll("&","&amp;").replaceAll("<","&lt;").replaceAll(">","&gt;").replaceAll('"',"&quot;").replaceAll("'","&#039;");
 }
@@ -5658,6 +5767,7 @@ function updateStats() {
   if (typeof _obrUpdateSkippedBtn === 'function') _obrUpdateSkippedBtn();
 }
 
+// ===== CSV =====
 function esc_csv(v) {
   if (v == null) return "";
   const s = String(v);
@@ -5701,6 +5811,7 @@ function buildCsvAndSkipped() {
   for (let ri = startRowIndex; ri < tableData.length; ri++) {
     const row = tableData[ri] || [];
 
+
     const rawBC = row[bcCol];
     const rawBCS = rawBC == null ? "" : String(rawBC);
     const normBC = normalizeBarcode(rawBC);
@@ -5727,6 +5838,7 @@ function buildCsvAndSkipped() {
   return { ok: true, csvContent: csv, skipped };
 }
 
+// ===== SKIPPED MODAL =====
 function openSkippedModal(skipped, fn) {
   pendingSkippedRows = skipped.slice();
   pendingCsvFileName = fn;
@@ -5771,6 +5883,7 @@ downloadSkippedBtn.addEventListener("click", function() {
   skippedSummary.textContent = `Показаны все пропуски: ${allRows.length}`;
 });
 
+// ===== DOWNLOAD CSV =====
 // Хранит строки пропусков после последнего экспорта
 let _lastSkippedRows = [];
 
@@ -5835,6 +5948,7 @@ if (obrShowSkippedBtn) {
   });
 }
 
+// ===== NEXT-STEP MODAL =====
 function obrShowNextStep(savedType) {
   const modal = document.getElementById('obrNextStepModal');
   const title = document.getElementById('obrNextStepTitle');
@@ -5918,10 +6032,12 @@ document.addEventListener('DOMContentLoaded', function() {
   const m = document.getElementById('obrNextStepModal');
   if (m) m.addEventListener('click', function(e) { if (e.target === this) obrCloseNextStep(); });
 });
+// ===== RESET =====
 resetBtn.addEventListener("click", function() {
   selectedColumns.clear(); startRowIndex = 0; obrRenderTable();
 });
 
+// ===== TEMPLATES MODAL =====
 function renderSynPanel(panel, tplName) {
   panel.innerHTML = "";
   const syns = columnSynonyms[tplName] || [];
@@ -6033,9 +6149,12 @@ addTemplateBtn.addEventListener("click", () => {
 });
 newTemplateInput.addEventListener("keydown", e => { if (e.key === "Enter") addTemplateBtn.click(); });
 
+
 // OBR file input handlers are already attached in the OBR script above
 
+// ════════════════════════════════════════════════════════════════════════════
 // APPBRIDGE: CSV injection from OBR into PriceMatcher
+// ════════════════════════════════════════════════════════════════════════════
 AppBridge.on('csvReady', async function(data) {
   // data = { csvText, fileName, isMyPrice }
   const { csvText, fileName, isMyPrice } = data;
@@ -6095,7 +6214,9 @@ AppBridge.on('csvReady', async function(data) {
   }
 });
 
+// ════════════════════════════════════════════════════════════════════════════
 // APPBRIDGE: Column settings sync (OBR ↔ JSON)
+// ════════════════════════════════════════════════════════════════════════════
 // When unified JSON is loaded, update OBR column templates/synonyms
 AppBridge.on('settingsLoaded', function(data) {
   if (data && data.columnSettings) {
@@ -6117,17 +6238,22 @@ AppBridge.on('settingsLoaded', function(data) {
 // CSV injection is handled directly in the OBR download handlers above via AppBridge.emit
 
 // downloadCurrentSynonyms is already extended in PM script1 to include columnSettings
+
 </script>
 
 <!-- ═══ PM MAIN UI LOGIC ═══ -->
 <script>
 "use strict";
+// ════════════════════════════════════════════════════════════════════════════
 // MAIN TABS
+// ════════════════════════════════════════════════════════════════════════════
 
 // FIX: declare _bcAddState at top-level to avoid TDZ when openAddToDB is called from inline onclick
 let _bcAddState = null; // { mainBC, synonyms: [{bc, fileName, checked}] }
 
+// ════════════════════════════════════════════════════════════════════════════
 // TOAST
+// ════════════════════════════════════════════════════════════════════════════
 function showToast(msg, type, ms) {
   type = type || 'info'; ms = ms || 3200;
   const rack = document.getElementById('toastRack');
@@ -6194,7 +6320,9 @@ function _slotShowCompetitorStatus(text) {
   if (statusEl) { statusEl.style.display = ''; statusEl.textContent = text; statusEl.className = 'monitor-info-slot-status'; }
 }
 
+// ════════════════════════════════════════════════════════════════════════════
 // CONFIRM DIALOG
+// ════════════════════════════════════════════════════════════════════════════
 let _jeConfirmResolve = null;
 function jeConfirmDialog(msg, title) {
   return new Promise(resolve => {
@@ -6223,7 +6351,10 @@ function jeConfirmClose(result) {
   if (_jeConfirmResolve) { _jeConfirmResolve(result); _jeConfirmResolve = null; }
 }
 
+// ════════════════════════════════════════════════════════════════════════════
+// ════════════════════════════════════════════════════════════════════════════
 // MATCHER ENGINE — Web Worker
+// ════════════════════════════════════════════════════════════════════════════
 const MATCHER_WORKER_SRC = `
 "use strict";
 const TL=[['ight','айт'],['tion','шн'],['ough','оф'],['sch','ш'],['tch','ч'],['all','ол'],['ing','инг'],['igh','ай'],['ull','ул'],['oor','ур'],['alk','ок'],['awn','он'],['sh','ш'],['ch','ч'],['zh','ж'],['kh','х'],['ph','ф'],['th','т'],['wh','в'],['ck','к'],['qu','кв'],['ts','ц'],['tz','ц'],['oo','у'],['ee','и'],['ea','и'],['ui','у'],['ew','ю'],['aw','о'],['ow','оу'],['oi','ой'],['oy','ой'],['ai','ей'],['ay','ей'],['au','о'],['ou','у'],['bb','бб'],['cc','кк'],['dd','дд'],['ff','фф'],['gg','гг'],['ll','лл'],['mm','мм'],['nn','нн'],['pp','пп'],['rr','рр'],['ss','сс'],['tt','тт'],['zz','цц'],['a','а'],['b','б'],['c','к'],['d','д'],['e','э'],['f','ф'],['g','г'],['h','х'],['i','и'],['j','дж'],['k','к'],['l','л'],['m','м'],['n','н'],['o','о'],['p','п'],['q','к'],['r','р'],['s','с'],['t','т'],['u','у'],['v','в'],['w','в'],['x','кс'],['y','й'],['z','з']];
@@ -6446,6 +6577,7 @@ self.onmessage=function({data}){
   // Минимум 200, максимум без ограничений (allItems.length).
   // Можно изменить число 200 или убрать Math.min для полного перебора.
   const effectiveLimit = Math.min(200, allItems.length);
+  // ─────────────────────────────────────────────────────────────────────────
 
   // seen pairs by sorted bc pair to avoid duplicates
   const seenPairs=new Set();
@@ -6496,7 +6628,9 @@ self.onmessage=function({data}){
 };
 `;
 
+// ════════════════════════════════════════════════════════════════════════════
 // MATCHER STATE
+// ════════════════════════════════════════════════════════════════════════════
 let _matchActivePairs = [];
 let _matchKnownPairs  = [];
 let _matchAllItems    = []; // все товары из всех прайсов (для поиска без пары)
@@ -6578,6 +6712,7 @@ document.addEventListener('click', function(e) {
   if (!chip) return;
   matcherToggleFile(decodeURIComponent(chip.dataset.mfName));
 });
+
 
 // Apply buffered matcher result when tab becomes visible again
 document.addEventListener('visibilitychange', function() {
@@ -6830,7 +6965,10 @@ document.getElementById('matcherHideKnownBtn').addEventListener('click', functio
   renderMatcherTable();
 });
 
+
+// ════════════════════════════════════════════════════════════════════════════
 // MATCH MODAL — tab switching + brand tab
+// ════════════════════════════════════════════════════════════════════════════
 function mcSwitchTab(tab) {
   const isSyn = (tab === 'syn');
   document.getElementById('mcPaneSyn').style.display   = isSyn ? '' : 'none';
@@ -7096,7 +7234,9 @@ document.addEventListener('DOMContentLoaded', function() {
   }
 });
 
+// ════════════════════════════════════════════════════════════════════════════
 // MATCH MODAL
+// ════════════════════════════════════════════════════════════════════════════
 function openMatchModal(i, view) {
   // i is an index into _matchRenderedPairs (the currently displayed list)
   const r = _matchRenderedPairs[i];
@@ -7265,7 +7405,9 @@ function updateMatchPairTags() {
   if (document.querySelector('.nav-tab[data-pane="matcher"].active')) renderMatcherTable();
 }
 
+// ════════════════════════════════════════════════════════════════════════════
 // JSON EDITOR (jeDB)
+// ════════════════════════════════════════════════════════════════════════════
 let jeDB = {};
 let jeChanges = 0;
 const JE_HISTORY_LIMIT = 50;
@@ -7457,6 +7599,9 @@ if (jeWrap) {
   }, { passive: true });
 }
 
+
+
+
 // ── Надёжное обновление строки редактора (patch DOM или full re-render) ──
 function jeForceUpdateRow(key) {
   try {
@@ -7610,7 +7755,10 @@ function jeClearForm() {
   ['jeNName','jeNMainBC','jeNSyns'].forEach(id => document.getElementById(id).value = '');
 }
 
+
+// ════════════════════════════════════════════════════════════════════════════
 // UNIFIED SAVE BAR — sub-tab switching
+// ════════════════════════════════════════════════════════════════════════════
 document.querySelectorAll('.syn-subtab').forEach(tab => {
   tab.addEventListener('click', () => {
     document.querySelectorAll('.syn-subtab').forEach(t => t.classList.remove('active'));
@@ -7702,7 +7850,9 @@ document.getElementById('jeXlsxFileIn').addEventListener('change', async functio
   } catch(err) { showToast('Ошибка импорта: '+err.message, 'warn'); }
 });
 
+// ════════════════════════════════════════════════════════════════════════════
 // SYNC: jeDB ↔ barcodeAliasMap
+// ════════════════════════════════════════════════════════════════════════════
 function rebuildBarcodeAliasFromJeDB(_skip) {
   if (typeof barcodeAliasMap === 'undefined') return;
   const m = new Map();
@@ -7809,7 +7959,9 @@ document.addEventListener('keydown', function(e) {
 jeUpdateStatus();
 jeRenderEditor();
 
+// ════════════════════════════════════════════════════════════════════════════
 // UNIFIED SAVE: combined JSON { barcodes: jeDB, brands: _brandDB }
+// ════════════════════════════════════════════════════════════════════════════
 let _unifiedUnsaved = false;
 
 function unifiedMarkUnsaved(dirty = true) {
@@ -7821,6 +7973,7 @@ function unifiedMarkUnsaved(dirty = true) {
 // jeDBNotifyChange already calls rebuildBarcodeAliasFromJeDB and updateMatchPairTags
 
 // JSON загружается через synonymsInput (карточка «Синонимы» на вкладке Мониторинг)
+
 
 // ── Header archive button — same as toolbar + Excel exports
 document.addEventListener('DOMContentLoaded', function() {
@@ -7892,8 +8045,10 @@ document.getElementById('unifiedSaveJsonBtn').addEventListener('click', async fu
   showToast(`JSON сохранён: ${Object.keys(jeDB).length} ШК + ${Object.keys(_brandDB).length} брендов + настройки колонок`, 'ok');
 });
 
+// ════════════════════════════════════════════════════════════════════════════
 // BRAND DICTIONARY
 // { "tchibo": { synonyms: ["чибо","тибио"], antonyms: ["нескафе"] }, ... }
+// ════════════════════════════════════════════════════════════════════════════
 let _brandDB = (() => {
   if (typeof BRAND_CONFIG_SAVED === 'undefined') return {};
   // Support both old (just brands obj) and new combined format
@@ -8134,7 +8289,11 @@ document.getElementById('brandClearAllBtn').addEventListener('click', function (
 
 // ── Bulk text import
 
+
+// ════════════════════════════════════════════════════════════════════════════
 // BRAND ADD MODAL
+// ════════════════════════════════════════════════════════════════════════════
+// ════════════════════════════════════════════════════════════════════════════
 // BRAND CONFLICT CHECKER
 // Проверяет противоречия и дубли перед сохранением бренда.
 // skipKey — ключ редактируемого бренда (чтобы не сравнивать с самим собой).
@@ -8143,6 +8302,7 @@ document.getElementById('brandClearAllBtn').addEventListener('click', function (
 // existingKey — если canonical уже есть в _brandDB (предложить объединить)
 // conflicts   — критические противоречия (синонимы vs антонимы)
 // warnings    — мягкие предупреждения (пересечения с другими брендами)
+// ════════════════════════════════════════════════════════════════════════════
 function brandCheckConflicts(newCanon, newSyns, newAnti, skipKey) {
   const result = { existingKey: null, conflicts: [], warnings: [], conflictWords: new Set() };
   if (!newCanon) return result;
@@ -8372,7 +8532,9 @@ document.addEventListener('DOMContentLoaded', function() {
   if (bcSave) bcSave.addEventListener('click', saveBcAddModal);
 });
 
+// ════════════════════════════════════════════════════════════════════════════
 // BARCODE → DB QUICK ADD (from monitoring table)
+// ════════════════════════════════════════════════════════════════════════════
 
 function openAddToDB(barcode, btnEl) {
   // Find the item in groupedData
@@ -8452,6 +8614,7 @@ function saveBcAddModal() {
   if (typeof _mvsRenderVisible === 'function') _mvsRenderVisible();
 }
 
+
 // ── Expose globals
 window.closeMatchModal = closeMatchModal;
 window.confirmMatchAction = confirmMatchAction;
@@ -8469,7 +8632,9 @@ window.closeBcAddModal = closeBcAddModal;
 // ── Init brand editor
 brandRender();
 
+// ════════════════════════════════════════════════════════════════════════════
 // MATCHER: JSON file info display + enable/disable toggle
+// ════════════════════════════════════════════════════════════════════════════
 window._matcherUpdateJsonInfo = function() {
   const jsonRow = document.getElementById('matcherJsonRow');
   const jsonLabel = document.getElementById('matcherJsonLabel');
@@ -8497,10 +8662,14 @@ window._matcherUpdateJsonInfo = function() {
   }
 })();
 
+// ════════════════════════════════════════════════════════════════════════════
 // BEFOREUNLOAD: session is auto-saved, no need to warn
 // (jeChanges still tracked for UI indicator purposes)
+// ════════════════════════════════════════════════════════════════════════════
 
+// ════════════════════════════════════════════════════════════════════════════
 // EXTENDED JSON LOAD: also parse columnSettings when synonymsInput loads
+// ════════════════════════════════════════════════════════════════════════════
 // Monkey-patch the synonymsInput handler by wrapping via AppBridge
 (function() {
   const origHandler = document.getElementById('synonymsInput');
@@ -8520,7 +8689,10 @@ window._matcherUpdateJsonInfo = function() {
   }); // no capture = fires after main handler
 })();
 
+
+// ════════════════════════════════════════════════════
 // SIDEBAR COLLAPSE
+// ════════════════════════════════════════════════════
 function toggleSidebar() {
   const sidebar = document.querySelector('.app-sidebar');
   const collapsed = sidebar.classList.toggle('collapsed');
@@ -8540,7 +8712,9 @@ function toggleSidebar() {
   }
 })();
 
+// ════════════════════════════════════════════════════
 // SIDEBAR FILE INFO PANEL
+// ════════════════════════════════════════════════════
 (function() {
   function sfShorten(name, max) {
     if (!name) return '';
@@ -8699,6 +8873,7 @@ function toggleSidebar() {
     }, 300);
   });
 })();
+
 </script>
 
 </div><!-- /app-main -->
@@ -8791,7 +8966,8 @@ function toggleSidebar() {
           competitorFilesData: (cfd||[]).map(function(f){ return { fileName: f.fileName, isMyPrice: false, data: f.data }; }),
           jeDB: jeDBCopy,
           brandDB: brandDBCopy,
-          matchActivePairs: matchPairs.length ? matchPairs : undefined
+          matchActivePairs: matchPairs.length ? matchPairs : undefined,
+          obrArchiveFiles: (window._obrArchiveFiles && window._obrArchiveFiles.length) ? window._obrArchiveFiles.slice() : undefined
         };
         _pmDB_set('session', session);
         // Show subtle save indicator
@@ -8888,6 +9064,16 @@ function toggleSidebar() {
             window._pmRestoringSession = true;
             pm.processAllData();
             window._pmRestoringSession = false;
+          }
+          // Restore prepared CSV archive files
+          if (session.obrArchiveFiles && session.obrArchiveFiles.length && window._obrArchiveFiles) {
+            try {
+              window._obrArchiveFiles.splice(0, window._obrArchiveFiles.length, ...session.obrArchiveFiles);
+              var _abBtn = document.getElementById('obrHeaderArchiveBtn');
+              var _mabBtn = document.getElementById('monitorDownloadArchiveBtn');
+              if (_abBtn) _abBtn.disabled = false;
+              if (_mabBtn) _mabBtn.disabled = false;
+            } catch(ae) { console.warn('Archive files restore error:', ae); }
           }
           // Restore match results if available
           if (session.matchActivePairs && session.matchActivePairs.length) {
