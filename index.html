@@ -695,31 +695,7 @@
           </div>
         </div>
 
-        <div class="dash-instr-hero" style="padding-top:14px;border-top:1px solid var(--border);border-bottom:none;margin-bottom:12px;">
-          <div class="dash-instr-hero-title" style="font-size:var(--fz-lg);">Пример: чёрный чай и зелёный чай</div>
-          <div class="dash-instr-hero-sub">У вас в прайсе — «Чай чёрный», у поставщика — «Tea black». Нужно создать <b>две отдельные группы</b> с взаимными антонимами, чтобы они не пересекались:</div>
-        </div>
 
-        <div class="dash-instr-grid" style="margin-bottom:16px;">
-          <div class="dash-instr-card" style="border-left:3px solid var(--accent);">
-            <div class="dash-instr-card-header"><span class="dash-instr-card-title">Группа «чёрный»</span></div>
-            <div class="dash-instr-card-body">
-              <b>Ключ:</b> чёрный<br>
-              <b>Синонимы:</b> черный, black, блэк<br>
-              <b>Антонимы:</b> зелёный, зеленый, green, белый, white, красный, red<br>
-              <span style="color:var(--text-secondary);font-size:10px;line-height:1.5;display:block;margin-top:4px;">Товар «Tea black» попадёт в эту группу. Товар «Tea green» — нет, потому что «green» стоит в антонимах.</span>
-            </div>
-          </div>
-          <div class="dash-instr-card" style="border-left:3px solid var(--green);">
-            <div class="dash-instr-card-header"><span class="dash-instr-card-title">Группа «зелёный»</span></div>
-            <div class="dash-instr-card-body">
-              <b>Ключ:</b> зелёный<br>
-              <b>Синонимы:</b> зеленый, green, грин<br>
-              <b>Антонимы:</b> чёрный, черный, black, белый, white, красный, red<br>
-              <span style="color:var(--text-secondary);font-size:10px;line-height:1.5;display:block;margin-top:4px;">Товар «Tea green» попадёт сюда. Товар «Tea black» — нет, потому что «black» стоит в антонимах.</span>
-            </div>
-          </div>
-        </div>
 
         <div class="dash-instr-how">
           <div class="dash-instr-how-title">Как добавить группу</div>
@@ -4201,7 +4177,53 @@ function trigrams(s){const st=new Set(),p='#'+s+'#';for(let i=0;i<p.length-2;i++
 function triSim(a,b){if(!a||!b)return 0;const ta=trigrams(a),tb=trigrams(b);let n=0;for(const g of ta)if(tb.has(g))n++;return n*2/(ta.size+tb.size);}
 function lcsLen(a,b){const A=a.split(' ').slice(0,80),B=b.split(' ').slice(0,80);let prev=new Uint8Array(B.length+1),curr=new Uint8Array(B.length+1);for(let i=0;i<A.length;i++){for(let j=0;j<B.length;j++)curr[j+1]=A[i]===B[j]?prev[j]+1:Math.max(curr[j],prev[j+1]);[prev,curr]=[curr,prev];curr.fill(0);}return prev[B.length];}
 function lcsSim(a,b){if(!a||!b)return(a===b)?1:0;const wa=Math.min(a.split(' ').length,80),wb=Math.min(b.split(' ').length,80);return 2*lcsLen(a,b)/(wa+wb);}
-function extractWeightNums(s){var r=[];s.replace(/(\\d+(?:[.,]\\d+)?)\\s*(?:г|мл|кг|л|мг)/g,function(m,n){r.push(parseFloat(n.replace(',','.')));});return r;}
+// extractMeasurements: конвертирует все формы единиц в г/мл
+const _UCANON={'г.':'г','гр':'г','гр.':'г','грамм':'г','граммов':'г','грамма':'г','г':'г','миллиграмм':'мг','миллиграммов':'мг','мг':'мг','кг.':'кг','килограмм':'кг','килограммов':'кг','кило':'кг','кг':'кг','мл.':'мл','миллилитр':'мл','миллилитров':'мл','мл':'мл','л.':'л','литр':'л','литра':'л','литров':'л','л':'л','g':'г','gr':'г','mg':'мг','kg':'кг','ml':'мл','ltr':'л','lt':'л','l':'л'};
+const _UCANON_PAT=/(\\d+(?:[.,]\\d+)?)\\s*(миллиграммов|миллиграмм|килограммов|килограмм|миллилитров|миллилитр|граммов|грамма|грамм|литров|литра|литр|кило|мг|гр|кг|мл|ltr|lt|kg|ml|mg|gr|л|г|g|l)(?=[^a-z\\u0430-\\u044f]|$)/gi;
+const _UCONV2={'г':['г',1],'мг':['г',0.001],'кг':['г',1000],'мл':['мл',1],'л':['мл',1000]};
+function _normalizeUnitsText(s){return s.replace(_UCANON_PAT,function(m,num,unit){var c=_UCANON[unit.toLowerCase().replace(/\\.$/,'')];return c?num+c:m;});}
+function extractMeasurements(raw){
+  var s=_normalizeUnitsText(raw.toLowerCase());
+  var res=[],seen=[];
+  var packRe=/(\\d+(?:[.,]\\d+)?)\\s*[xх×*]\\s*(\\d+(?:[.,]\\d+)?)\\s*(г|мг|кг|мл|л)|(\\d+(?:[.,]\\d+)?)\\s*(г|мг|кг|мл|л)\\s*[xх×*]\\s*(\\d+(?:[.,]\\d+)?)/g;
+  var m;
+  while((m=packRe.exec(s))!==null){
+    seen.push([m.index,packRe.lastIndex]);
+    var cnt=m[3]?parseFloat(m[1].replace(',','.')):parseFloat(m[6].replace(',','.'));
+    var val=m[3]?parseFloat(m[2].replace(',','.')):parseFloat(m[4].replace(',','.'));
+    var unit=m[3]||m[5];
+    var cv=_UCONV2[unit];if(!cv)continue;
+    res.push({total:Math.round(val*cnt*cv[1]*1e6)/1e6,single:Math.round(val*cv[1]*1e6)/1e6,count:cnt,base:cv[0]});
+  }
+  var unitRe=/(\\d+(?:[.,]\\d+)?)\\s*(г|мг|кг|мл|л)/g;
+  while((m=unitRe.exec(s))!==null){
+    var skip=false;for(var pi=0;pi<seen.length;pi++){if(m.index>=seen[pi][0]&&m.index<seen[pi][1]){skip=true;break;}}
+    if(skip)continue;
+    var cv2=_UCONV2[m[2]];if(!cv2)continue;
+    var v2=parseFloat(m[1].replace(',','.'));
+    res.push({total:Math.round(v2*cv2[1]*1e6)/1e6,single:Math.round(v2*cv2[1]*1e6)/1e6,count:1,base:cv2[0]});
+  }
+  return res;
+}
+function weightsCompare(m1,m2){
+  // +0.18 — точное совпадение простых единиц (1л=1000мл, 250г=0.25кг)
+  // -0.18 — явное несовпадение простых единиц (190г vs 500г)
+  //  0    — нейтрально: нет данных, или хотя бы одна сторона — упаковка (4×250г)
+  //          упаковка не даёт бонус: продают поштучно, блок ≠ штука
+  if(!m1.length||!m2.length)return 0;
+  const isSimple=x=>x.count===1;
+  const simple1=m1.filter(isSimple),simple2=m2.filter(isSimple);
+  // Бонус только если обе стороны — простые единицы и total совпадает
+  if(simple1.length&&simple2.length){
+    const s1=new Set(simple1.map(x=>x.total+'|'+x.base));
+    const s2=new Set(simple2.map(x=>x.total+'|'+x.base));
+    for(const v of s1)if(s2.has(v))return 0.18;  // совпадение (с конвертацией)
+    // Штраф только если одни базовые единицы но разные значения
+    const b1=new Set(simple1.map(x=>x.base)),b2=new Set(simple2.map(x=>x.base));
+    for(const b of b1)if(b2.has(b))return -0.18;
+  }
+  return 0; // упаковка или несравнимые единицы — нейтрально
+}
 // Новые вспомогательные метрики
 function jaccardSim(s1,s2){const set1=new Set(s1.split(' ').filter(Boolean)),set2=new Set(s2.split(' ').filter(Boolean));const inter=[...set1].filter(x=>set2.has(x)).length;return inter/(set1.size+set2.size-inter)||0;}
 function partialRatio(s1,s2){if(s1.includes(s2)||s2.includes(s1))return 1.0;return s1.length>s2.length?s2.length/s1.length:s1.length/s2.length;}
@@ -4212,7 +4234,7 @@ function wTokenSim(a,b,idf){const A=a.split(' '),B=b.split(' ');let wA=0,wB=0;co
 function buildInvIdx(items){const idx=new Map();items.forEach((it,i)=>{for(const tok of it._norm.split(' ')){if(tok.length<1)continue;if(!idx.has(tok))idx.set(tok,[]);idx.get(tok).push(i);}});return idx;}
 function getCandidates(norm,idx,limit,idf){const toks=norm.split(' ').filter(t=>t.length>0);const scores=new Map();for(const t of toks){const w=idf?(idf.get(t)||1):1;for(const id of(idx.get(t)||[]))scores.set(id,(scores.get(id)||0)+w);}const ranked=[...scores.entries()].sort((a,b)=>b[1]-a[1]).slice(0,limit).map(([id])=>id);if(idf){const IDF_RARE=3.0;const rareToks=toks.filter(t=>(idf.get(t)||0)>IDF_RARE).slice(0,6);const rankedSet=new Set(ranked);for(const t of rareToks){for(const id of(idx.get(t)||[]).slice(0,25)){if(!rankedSet.has(id)){ranked.push(id);rankedSet.add(id);}}}}return ranked;}
 // calcSim — гибрид: старые алгоритмы (tri+lcs+idf+синонимы+числа) + новые метрики (token sort, partial)
-function calcSim(name1,name2,idf,bsynMap,bantMap){const pre1=preNorm(name1),pre2=preNorm(name2);const nums1=extractWeightNums(pre1),nums2=extractWeightNums(pre2);let n1=normalize(name1),n2=normalize(name2);if(!n1||!n2)return 0;
+function calcSim(name1,name2,idf,bsynMap,bantMap){const pre1=preNorm(name1),pre2=preNorm(name2);const meas1=extractMeasurements(pre1),meas2=extractMeasurements(pre2);let n1=normalize(name1),n2=normalize(name2);if(!n1||!n2)return 0;
 let synBonus=0;
 if(bsynMap&&bsynMap.size){
   const n1b=n1,n2b=n2;
@@ -4233,7 +4255,12 @@ if(bantMap&&bantMap.size){
   const anti2=_getBantSets(toks2),set1=_tokSet(toks1);
   for(const anti of anti2){for(const t of set1){if(anti.has(t))return 0;}}
 }
-let numFactor=1.0,numBonus=0;if(nums1.length>0&&nums2.length>0){const s1=new Set(nums1.map(n=>n.toFixed(5))),s2=new Set(nums2.map(n=>n.toFixed(5)));const common=[...s1].filter(x=>s2.has(x)).length;const total=new Set([...s1,...s2]).size;const ratio=common/total;if(ratio===0)numFactor=0.82;else if(ratio<0.5)numFactor=0.90;else numBonus=ratio*0.12;if(synBonus>0)numFactor=Math.max(numFactor,0.88);}
+// Вес/объём: конвертируем единицы и сравниваем (1л=1000мл, 0.25кг=250г, 4×250г=1кг)
+const weightDelta=weightsCompare(meas1,meas2);
+let numFactor=1.0,numBonus=0;
+if(weightDelta>0){numBonus=weightDelta;}                          // совпадение → бонус
+else if(weightDelta<0){numFactor=0.82;}                           // несовпадение → штраф
+if(synBonus>0&&numFactor<1)numFactor=Math.max(numFactor,0.88);   // синоним смягчает штраф
 const wc1=n1.split(' ').length,wc2=n2.split(' ').length;const lenRatio=Math.min(wc1,wc2)/Math.max(wc1,wc2);const lenPenalty=lenRatio<0.33?0.6:lenRatio<0.5?0.82:1.0;
 const n1s=n1.split(' ').sort().join(' ');const n2s=n2.split(' ').sort().join(' ');const tri=Math.max(triSim(n1,n2),triSim(n1s,n2s));const lcss=Math.max(lcsSim(n1,n2),lcsSim(n1s,n2s));const wTok=idf?wTokenSim(n1,n2,idf):lcss;const len=(n1.split(' ').length+n2.split(' ').length)/2;const wTri=len<=3?0.25:0.35,wLcs=len<=3?0.20:0.25,wTok_=len<=3?0.55:0.40;
 let score=(tri*wTri+lcss*wLcs+wTok*wTok_+numBonus)*numFactor*lenPenalty+synBonus;
@@ -4581,7 +4608,7 @@ function runMatcher() {
 
 function updateMatcherStats() {
   const active = _matchHideKnown
-    ? _matchActivePairs.filter(p => !(p.aInDB || p.bInDB))
+    ? _matchActivePairs.filter(p => !(p.aInDB && p.bInDB && p.aKey === p.bKey))
     : _matchActivePairs;
   document.getElementById('ms-all').textContent      = active.filter(p => p.sim >= 55).length;
   document.getElementById('ms-high').textContent     = active.filter(p => p.sim >= 80).length;
@@ -4620,7 +4647,7 @@ function renderMatcherTable() {
 
   let list = getMatchViewList().slice();
   if (_matchHideKnown && (_matchCurrentView === 'all' || _matchCurrentView === 'high' || _matchCurrentView === 'mid' || _matchCurrentView === 'possible')) {
-    list = list.filter(r => !(r.aInDB || r.bInDB));
+    list = list.filter(r => !(r.aInDB && r.bInDB && r.aKey === r.bKey));
   }
 
 
@@ -6900,13 +6927,19 @@ function toggleSidebar() {
                 if (typeof renderMatcherTable === 'function') {
                   var mWrap = document.getElementById('matcherTableWrap');
                   var mEmpty = document.getElementById('matcherEmpty');
+                  var mStats = document.getElementById('matcherStats');
+                  var mHideBtn = document.getElementById('matcherHideKnownBtn');
+                  var mSearchInp = document.getElementById('matcherSearchInp');
                   if (mWrap) mWrap.style.display = '';
                   if (mEmpty) mEmpty.style.display = 'none';
-                  if (mStats) mStats.style.display = '';
+                  if (mStats) mStats.style.display = 'flex';
                   var mSearch = document.getElementById('matcherSearchRow');
                   if (mSearch) mSearch.style.display = '';
+                  if (mHideBtn) mHideBtn.style.display = '';
+                  if (mSearchInp) mSearchInp.disabled = false;
                   if (typeof updateMatcherStats === 'function') updateMatcherStats();
-                  renderMatcherTable();
+                  if (typeof setMatchView === 'function') setMatchView(_matchCurrentView || 'all');
+                  else renderMatcherTable();
                   if (typeof matcherFileChipsRender === 'function') matcherFileChipsRender();
                 }
               }
